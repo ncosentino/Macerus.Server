@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ProjectXyz.Api.Amqp;
 using ProjectXyz.Api.Core;
+using ProjectXyz.Api.Messaging.Json;
 using ProjectXyz.Api.Interface;
 using ProjectXyz.Data.Sql;
 using ProjectXyz.Game.Core;
@@ -43,18 +44,26 @@ namespace Macerus.Server
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
+                const string ROUTING_KEY = "hello";
                 channel.QueueDeclare(
-                    queue: "hello",
+                    queue: ROUTING_KEY,
                     durable: false,
                     exclusive: false,
                     autoDelete: false,
                     arguments: null);
 
+                var channelWriter = ChannelWriter.Create(
+                    connection.CreateModel(),
+                    ROUTING_KEY);
                 var notifier = (INotifier)null; // TODO: implement this
-                var responder = (IResponder)null; // TODO: implement this
+                var responder = Responder.Create(
+                    JsonResponseWriter.Create(),
+                    channelWriter);
 
                 var consumer = new EventingBasicConsumer(channel);
-                var requestFactory = RequestFactory.Create();
+                channel.BasicConsume(ROUTING_KEY, true, consumer);
+
+                var requestFactory = RequestFactory.Create(JsonRequestReader.Create());
 
                 using (var requestPublisher = RequestPublisher.Create(
                     consumer,

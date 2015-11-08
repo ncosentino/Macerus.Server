@@ -96,13 +96,21 @@
       <Project>{5c2477bf-cd54-4d82-af6a-33f3da58b742}</Project>
       <Name>ProjectXyz.Api.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Api.Interface.Messaging\ProjectXyz.Api.Interface.Messaging.csproj">
-      <Project>{0d988c68-749c-4ddb-b4ab-8ee809cbf2d0}</Project>
-      <Name>ProjectXyz.Api.Interface.Messaging</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\projectXyz\ProjectXyz.Api.Interface\ProjectXyz.Api.Interface.csproj">
       <Project>{bd766253-0125-4539-9f19-27fad67288e7}</Project>
       <Name>ProjectXyz.Api.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Api.Messaging.Core\ProjectXyz.Api.Messaging.Core.csproj">
+      <Project>{815efa46-153a-4cd1-b0f3-53543db1b7ef}</Project>
+      <Name>ProjectXyz.Api.Messaging.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Api.Messaging.Interface\ProjectXyz.Api.Messaging.Interface.csproj">
+      <Project>{5734aa15-5461-4e2d-8f62-58b4ed0df53b}</Project>
+      <Name>ProjectXyz.Api.Messaging.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Api.Messaging.Json\ProjectXyz.Api.Messaging.Json.csproj">
+      <Project>{c7d454af-0b06-4b1f-bece-b18250210b8f}</Project>
+      <Name>ProjectXyz.Api.Messaging.Json</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\projectXyz\ProjectXyz.Application.Core\ProjectXyz.Application.Core.csproj">
       <Project>{5f23d262-459c-4655-acde-d8563fe33698}</Project>
