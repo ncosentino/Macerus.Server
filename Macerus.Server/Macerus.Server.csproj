@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6C812694-DB15-46ED-B9EE-613B5CF48A15}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Macerus.Server</RootNamespace>
+    <AssemblyName>Macerus.Server</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="C5, Version=1.0.2.0, Culture=neutral, PublicKeyToken=06a1b38866503b69, processorArchitecture=MSIL">
+      <HintPath>..\packages\C5.1.0.2.0\lib\net40\C5.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plossum CommandLine, Version=0.3.0.14, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Plossum.CommandLine.0.3.0.14\lib\net40\Plossum CommandLine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RabbitMQ.Client, Version=3.5.6.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\packages\RabbitMQ.Client.3.5.6\lib\net40\RabbitMQ.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.98.1\lib\net46\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.98.1\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.98.1\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commandline\CommandlineOptionsParser.cs" />
+    <Compile Include="Commandline\ICommandlineOptionsParser.cs" />
+    <Compile Include="Commandline\StartupParameters.cs" />
+    <Compile Include="ILauncher.cs" />
+    <Compile Include="IStartupParameters.cs" />
+    <Compile Include="Launcher.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Api.Amqp\ProjectXyz.Api.Amqp.csproj">
+      <Project>{3ef55103-9b98-4bbf-88a7-ba87a483ca4b}</Project>
+      <Name>ProjectXyz.Api.Amqp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Api.Core\ProjectXyz.Api.Core.csproj">
+      <Project>{5c2477bf-cd54-4d82-af6a-33f3da58b742}</Project>
+      <Name>ProjectXyz.Api.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Api.Interface.Messaging\ProjectXyz.Api.Interface.Messaging.csproj">
+      <Project>{0d988c68-749c-4ddb-b4ab-8ee809cbf2d0}</Project>
+      <Name>ProjectXyz.Api.Interface.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Api.Interface\ProjectXyz.Api.Interface.csproj">
+      <Project>{bd766253-0125-4539-9f19-27fad67288e7}</Project>
+      <Name>ProjectXyz.Api.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Application.Core\ProjectXyz.Application.Core.csproj">
+      <Project>{5f23d262-459c-4655-acde-d8563fe33698}</Project>
+      <Name>ProjectXyz.Application.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Application.Interface\ProjectXyz.Application.Interface.csproj">
+      <Project>{69a56c1b-cd41-4dcc-abf1-dbb097dd489d}</Project>
+      <Name>ProjectXyz.Application.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Application.Shared\ProjectXyz.Application.Shared.csproj">
+      <Project>{1eae0ba1-6ff0-46ae-87c1-84d04f137f33}</Project>
+      <Name>ProjectXyz.Application.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Data.Core\ProjectXyz.Data.Core.csproj">
+      <Project>{fa14c733-df45-4e7b-b61f-497d032fc0b1}</Project>
+      <Name>ProjectXyz.Data.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Data.Interface\ProjectXyz.Data.Interface.csproj">
+      <Project>{d84ca25f-a1f8-4efc-ad09-906d786c3094}</Project>
+      <Name>ProjectXyz.Data.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Data.Sql\ProjectXyz.Data.Sql.csproj">
+      <Project>{e424c78a-da58-47d2-b003-dbb902cb92e7}</Project>
+      <Name>ProjectXyz.Data.Sql</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Game.Core\ProjectXyz.Game.Core.csproj">
+      <Project>{8e0722b2-2264-4ba9-93c7-8355c3bdf211}</Project>
+      <Name>ProjectXyz.Game.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Game.Interface\ProjectXyz.Game.Interface.csproj">
+      <Project>{e212e33c-399c-47f6-a00e-00e0a5268477}</Project>
+      <Name>ProjectXyz.Game.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Plugins.Core\ProjectXyz.Plugins.Core.csproj">
+      <Project>{345a6a69-13f6-4089-bbf3-d6d502e8ec5b}</Project>
+      <Name>ProjectXyz.Plugins.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Plugins.Enchantments\ProjectXyz.Plugins.Enchantments.csproj">
+      <Project>{a8a53899-95ad-4466-9a3a-8a43dc9c6249}</Project>
+      <Name>ProjectXyz.Plugins.Enchantments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Plugins.Interface\ProjectXyz.Plugins.Interface.csproj">
+      <Project>{44f68c7b-0cdb-49a8-8e71-89ebd095f7a4}</Project>
+      <Name>ProjectXyz.Plugins.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Plugins.Items\ProjectXyz.Plugins.Items.csproj">
+      <Project>{565994c5-942a-429e-86c1-3d75e9caf442}</Project>
+      <Name>ProjectXyz.Plugins.Items</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.98.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.98.1\build\net46\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.98.1\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.98.1\build\net46\System.Data.SQLite.Core.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
