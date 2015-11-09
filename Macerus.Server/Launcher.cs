@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using ProjectXyz.Api.Amqp;
 using ProjectXyz.Api.Core;
 using ProjectXyz.Api.Messaging.Json;
@@ -15,6 +16,7 @@ using ProjectXyz.Data.Sql;
 using ProjectXyz.Game.Core;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Framing;
 
 namespace Macerus.Server
 {
@@ -62,16 +64,27 @@ namespace Macerus.Server
                     connection.CreateModel(),
                     ROUTING_KEY);
                 var notifier = (INotifier)null; // TODO: implement this
-                var responder = Responder.Create(
+
+
+                var responseSender = ResponseSender.Create(
                     JsonResponseWriter.Create(),
                     channelWriter,
                     reverseRequestMapping);
+                var responseFactory = ResponseFactory.Create(Activator.CreateInstance);
+                var responder = Responder.Create(
+                    responseFactory,
+                    responseSender);
 
                 var consumer = new EventingBasicConsumer(channel);
                 channel.BasicConsume(ROUTING_KEY, true, consumer);
 
+                var jsonSerializerSettings = new JsonSerializerSettings();
+                jsonSerializerSettings.Converters.Add(ConcreteConverter.Create(() => AppDomain.CurrentDomain
+                    .GetAssemblies()
+                    .Where(x => x.FullName.IndexOf("Api.Messaging", StringComparison.OrdinalIgnoreCase) != -1)
+                    .SelectMany(x => x.GetExportedTypes())));
                 var requestFactory = RequestFactory.Create(
-                    JsonRequestReader.Create(),
+                    JsonRequestReader.Create(jsonSerializerSettings),
                     requestMapping);
 
                 using (var requestPublisher = RequestPublisher.Create(
