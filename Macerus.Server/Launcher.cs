@@ -9,6 +9,8 @@ using ProjectXyz.Api.Amqp;
 using ProjectXyz.Api.Core;
 using ProjectXyz.Api.Messaging.Json;
 using ProjectXyz.Api.Interface;
+using ProjectXyz.Api.Messaging.Core;
+using ProjectXyz.Api.Messaging.Interface;
 using ProjectXyz.Data.Sql;
 using ProjectXyz.Game.Core;
 using RabbitMQ.Client;
@@ -52,18 +54,25 @@ namespace Macerus.Server
                     autoDelete: false,
                     arguments: null);
 
+                var messageDiscoverer = MessageDiscoverer.Create();
+                var requestMapping = messageDiscoverer.Discover<IRequest>(AppDomain.CurrentDomain.GetAssemblies());
+                var reverseRequestMapping = requestMapping.ToDictionary(x => x.Value, x => x.Key);
+
                 var channelWriter = ChannelWriter.Create(
                     connection.CreateModel(),
                     ROUTING_KEY);
                 var notifier = (INotifier)null; // TODO: implement this
                 var responder = Responder.Create(
                     JsonResponseWriter.Create(),
-                    channelWriter);
+                    channelWriter,
+                    reverseRequestMapping);
 
                 var consumer = new EventingBasicConsumer(channel);
                 channel.BasicConsume(ROUTING_KEY, true, consumer);
 
-                var requestFactory = RequestFactory.Create(JsonRequestReader.Create());
+                var requestFactory = RequestFactory.Create(
+                    JsonRequestReader.Create(),
+                    requestMapping);
 
                 using (var requestPublisher = RequestPublisher.Create(
                     consumer,
