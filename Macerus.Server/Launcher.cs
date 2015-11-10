@@ -14,6 +14,7 @@ using ProjectXyz.Api.Messaging.Core;
 using ProjectXyz.Api.Messaging.Interface;
 using ProjectXyz.Data.Sql;
 using ProjectXyz.Game.Core;
+using ProjectXyz.Utilities;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Framing;
@@ -56,33 +57,40 @@ namespace Macerus.Server
                     autoDelete: false,
                     arguments: null);
 
+                var messagingAssemblies = AppDomain
+                    .CurrentDomain
+                    .GetAssemblies()
+                    .Where(x => x.FullName.IndexOf("Api.Messaging", StringComparison.OrdinalIgnoreCase) != -1)
+                    .ToArray();
                 var messageDiscoverer = MessageDiscoverer.Create();
-                var requestMapping = messageDiscoverer.Discover<IRequest>(AppDomain.CurrentDomain.GetAssemblies());
+                var requestMapping = messageDiscoverer.Discover<IRequest>(messagingAssemblies);
                 var reverseRequestMapping = requestMapping.ToDictionary(x => x.Value, x => x.Key);
+
+                var responseMapping = messageDiscoverer.Discover<IResponse>(messagingAssemblies);
+                var reverseResponseMapping = responseMapping.ToDictionary(x => x.Value, x => x.Key);
 
                 var channelWriter = ChannelWriter.Create(
                     connection.CreateModel(),
-                    ROUTING_KEY);
+                    "Responses To Player");
                 var notifier = (INotifier)null; // TODO: implement this
 
+                var typeMapper = TypeMapper.Create(messagingAssemblies.SelectMany(x => x.GetExportedTypes()));
 
                 var responseSender = ResponseSender.Create(
                     JsonResponseWriter.Create(),
                     channelWriter,
-                    reverseRequestMapping);
-                var responseFactory = ResponseFactory.Create(Activator.CreateInstance);
+                    reverseResponseMapping);
+                var responseFactory = ResponseFactory.Create(
+                    typeMapper,
+                    Activator.CreateInstance);
                 var responder = Responder.Create(
                     responseFactory,
                     responseSender);
 
                 var consumer = new EventingBasicConsumer(channel);
-                channel.BasicConsume(ROUTING_KEY, true, consumer);
 
                 var jsonSerializerSettings = new JsonSerializerSettings();
-                jsonSerializerSettings.Converters.Add(ConcreteConverter.Create(() => AppDomain.CurrentDomain
-                    .GetAssemblies()
-                    .Where(x => x.FullName.IndexOf("Api.Messaging", StringComparison.OrdinalIgnoreCase) != -1)
-                    .SelectMany(x => x.GetExportedTypes())));
+                jsonSerializerSettings.Converters.Add(ConcreteConverter.Create(typeMapper));
                 var requestFactory = RequestFactory.Create(
                     JsonRequestReader.Create(jsonSerializerSettings),
                     requestMapping);
@@ -115,6 +123,7 @@ namespace Macerus.Server
                     var game = Game.Create(
                         gameManager,
                         apiManager);
+                    game.Started += (_, __) => channel.BasicConsume(ROUTING_KEY, true, consumer);
 
                     await game.StartAsync(cancellationToken);
                 }

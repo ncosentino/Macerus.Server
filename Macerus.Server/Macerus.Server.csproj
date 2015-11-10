@@ -164,6 +164,10 @@
       <Project>{565994c5-942a-429e-86c1-3d75e9caf442}</Project>
       <Name>ProjectXyz.Plugins.Items</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Utilities\ProjectXyz.Utilities.csproj">
+      <Project>{0ed9070e-58c3-4606-b6a5-fadff0a9f73f}</Project>
+      <Name>ProjectXyz.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
