@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ProjectXyz.Api.Amqp;
 using ProjectXyz.Api.Core;
-using ProjectXyz.Api.Messaging.Json;
 using ProjectXyz.Api.Interface;
-using ProjectXyz.Api.Messaging.Core;
 using ProjectXyz.Api.Messaging.Interface;
+using ProjectXyz.Api.Messaging.Serialization.Json;
 using ProjectXyz.Data.Sql;
 using ProjectXyz.Game.Core;
 using ProjectXyz.Utilities;
@@ -57,11 +58,10 @@ namespace Macerus.Server
                     autoDelete: false,
                     arguments: null);
 
-                var messagingAssemblies = AppDomain
-                    .CurrentDomain
-                    .GetAssemblies()
-                    .Where(x => x.FullName.IndexOf("Api.Messaging", StringComparison.OrdinalIgnoreCase) != -1)
-                    .ToArray();
+                var messagingAssemblies = new[]
+                {
+                    Assembly.LoadFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ProjectXyz.Api.Messaging.Core.dll")),
+                };
                 var messageDiscoverer = MessageDiscoverer.Create();
                 var requestMapping = messageDiscoverer.Discover<IRequest>(messagingAssemblies);
                 var reverseRequestMapping = requestMapping.ToDictionary(x => x.Value, x => x.Key);
@@ -90,7 +90,6 @@ namespace Macerus.Server
                 var consumer = new EventingBasicConsumer(channel);
 
                 var jsonSerializerSettings = new JsonSerializerSettings();
-                jsonSerializerSettings.Converters.Add(ConcreteConverter.Create(typeMapper));
                 var requestFactory = RequestFactory.Create(
                     JsonRequestReader.Create(jsonSerializerSettings),
                     requestMapping);

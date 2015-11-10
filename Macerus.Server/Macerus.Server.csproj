@@ -112,9 +112,13 @@
       <Project>{5734aa15-5461-4e2d-8f62-58b4ed0df53b}</Project>
       <Name>ProjectXyz.Api.Messaging.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Api.Messaging.Json\ProjectXyz.Api.Messaging.Json.csproj">
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Api.Messaging.Serialization.Interface\ProjectXyz.Api.Messaging.Serialization.Interface.csproj">
+      <Project>{e9f32e99-1009-491c-96b8-44aa2d015112}</Project>
+      <Name>ProjectXyz.Api.Messaging.Serialization.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projectXyz\ProjectXyz.Api.Messaging.Serialization.Json\ProjectXyz.Api.Messaging.Serialization.Json.csproj">
       <Project>{c7d454af-0b06-4b1f-bece-b18250210b8f}</Project>
-      <Name>ProjectXyz.Api.Messaging.Json</Name>
+      <Name>ProjectXyz.Api.Messaging.Serialization.Json</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\projectXyz\ProjectXyz.Application.Core\ProjectXyz.Application.Core.csproj">
       <Project>{5f23d262-459c-4655-acde-d8563fe33698}</Project>
